@@ -1,0 +1,29 @@
+{
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "6312B7038589401E7479B6C0597D1304EB8371F6" : 9223372036854775807,
+    "EF914D2D8B3604490B174A39EDD558835BBD372E" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "C99325A3-6AD8-4BCB-8D2B-E5B29FF818A2",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "6312B7038589401E7479B6C0597D1304EB8371F6" : "..\/..\/addons\/ofxControl",
+    "EF914D2D8B3604490B174A39EDD558835BBD372E" : "..\/..\/addons\/ofxKinectV2"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "unpettable-cat-kinect",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "unpettable-cat-kinect.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "git:\/\/github.com\/genekogan\/ofxControl.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6312B7038589401E7479B6C0597D1304EB8371F6"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "git:\/\/github.com\/ofTheo\/ofxKinectV2.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "EF914D2D8B3604490B174A39EDD558835BBD372E"
+    }
+  ]
+}

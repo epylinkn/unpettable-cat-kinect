@@ -9,14 +9,40 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    ofSetWindowShape(800, 600);
+    ofSetWindowTitle("UNPETTABLE CAT");
+    ofBackground(30, 30, 30);
     
+    // default settings
     doneOnce = false;
     depthOnce = false;
+    sendReal = false;
+    sendScreen = true;
+    oscDestination = OSC_DESTINATION_DEFAULT;
+    oscAddressRoot = OSC_ADDRESS_ROOT_DEFAULT;
+    oscPort = OSC_PORT_DEFAULT;
+    
+    // load settings from file
+//    ofXml xml;
+//    xml.load("settings.xml");
+//    xml.setTo("unpettable-cat-kinect");
+//    oscDestination = xml.getValue("ip");
+//    oscPort = ofToInt(xml.getValue("port"));
+//    oscAddressRoot = xml.getValue("address");
+    
+    // addresses + setup osc
+    realWorldAddress = oscAddressRoot + "/realworld";
+    screenAddress = oscAddressRoot + "/screen";
+    osc.setup(oscDestination, oscPort);
+    oscMessageString = "Sending OSC to " + oscDestination + ", port " + ofToString(oscPort);
+    
+    // setup gui
+    gui.setName("unpettable-cat-kinect");
+//    gui.addToggle(realWorldAddress, &sendReal);
+    gui.addToggle("RECORD", &sendScreen);
     
     //Uncomment for verbose info from libfreenect2
     //ofSetLogLevel(OF_LOG_VERBOSE);
-    
-    ofBackground(30, 30, 30);
     
     //see how many devices we have.
     ofxKinectV2 tmp;
@@ -37,7 +63,6 @@ void ofApp::setup(){
     }
     
     panel.loadFromFile("settings.xml");
-    
 }
 
 //--------------------------------------------------------------
@@ -50,6 +75,9 @@ void ofApp::update(){
             texRGB[d].loadData( kinects[d]->getRgbPixels() );
         }
     }
+    
+    
+
 }
 
 
@@ -65,7 +93,7 @@ void ofApp::draw(){
         float shiftY = 100 + ((10 + texDepth[d].getHeight()) * d);
         
         texDepth[d].draw(200, shiftY);
-        texRGB[d].draw(200, shiftY + texDepth[d].getHeight(), dwHD, dhHD);
+//        texRGB[d].draw(200, shiftY + texDepth[d].getHeight(), dwHD, dhHD);
     }
     
     
@@ -76,8 +104,8 @@ void ofApp::draw(){
     
     ofPixels pix;
     texRGB[0].readToPixels(pix);
-    string debugString = "Num pixels: " + ofToString(pix.size());
-    ofDrawBitmapString(debugString, 20, 30);
+    string debugString = "Num RGB pixels: " + ofToString(pix.size());
+    ofDrawBitmapString(debugString, 20, 76);
     
 
 
@@ -107,16 +135,32 @@ void ofApp::draw(){
     //    ofDrawBitmapString(debugDepth, 20, 40);
     ofPixels depthPixels;
     texDepth[0].readToPixels(depthPixels);
+    debugString = "Num DEPTH pixels: " + ofToString(depthPixels.size());
+    ofDrawBitmapString(debugString, 20, 88);
     
     unsigned char * pixels  = depthPixels.getData();
     char prevDepth;
     int changeCounter = 0;
     
+    int min, max;
     if (!depthOnce) {
         for(int i = 0; i < depthPixels.size(); i++){
             int depth = pixels[i];
             
-            if (changeCounter > 1000) {
+            if (i == 0) {
+                min = depth;
+                max = depth;
+            }
+            
+            if (depth < min) {
+                min = depth;
+            }
+            
+            if (depth > max) {
+                max = depth;
+            }
+            
+            if (changeCounter > 5000) {
                 depthOnce = true;
                 break;
                 
@@ -127,10 +171,46 @@ void ofApp::draw(){
                 string foo = "Depth pixel: " + ofToString(depth);
                 std::cout << foo << std::endl;
             }
+            
+            prevDepth = depth;
         }
-    }
+        
+        std::cout << "Min Depth: " + ofToString(min) << std::endl;
+        std::cout << "Max Depth: " + ofToString(max) << std::endl;
 
-    ofDrawBitmapString("Points: ", 10, 14);
+    }
+    
+    // send screen coordinates
+    if (sendScreen) {
+        //        ofxOscMessage msg;
+        //        msg.setAddress(screenAddress);
+        //
+        //        for (int i = 0; i < pix.size(); i+= pix.getNumChannels()) {
+        //            ofColor color = pix.getColor(i);
+        //            msg.addIntArg(color.r);
+        //            msg.addIntArg(color.g);
+        //            msg.addIntArg(color.b);
+        //        }
+        //
+        //        osc.sendMessage(msg);
+        
+        ofxOscMessage msg;
+        msg.setAddress(screenAddress);
+        
+        int density = 100; // 1/density
+        for (int i = 0; i < depthPixels.size(); i += density) {
+            int depth = pixels[i];
+//            std::cout << "Depth: " + ofToString(depth) << std::endl;
+            msg.addFloatArg(depth);
+        }
+        
+        osc.sendMessage(msg);
+    }
+    
+    // send real world coordinates
+    if (sendReal) {
+        std::cout << "WE SHOULDN'T BE HERE!";
+    }
 }
 
 //--------------------------------------------------------------

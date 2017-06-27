@@ -3,6 +3,11 @@
 #include "ofMain.h"
 #include "ofxKinectV2.h"
 #include "ofxGui.h"
+#include "ofxControl.h"
+
+#define OSC_DESTINATION_DEFAULT "localhost"
+#define OSC_ADDRESS_ROOT_DEFAULT "/kinect"
+#define OSC_PORT_DEFAULT 6448
 
 class ofApp : public ofBaseApp{
     
@@ -29,6 +34,19 @@ public:
     vector <ofTexture> texRGB;
     vector <ofFloatPixels> rawDepthPixels;
     vector <ofColor> testdata;
+    
+    ofxOscSender osc;
+    string oscDestination;
+    string oscAddressRoot;
+    int oscPort;
+    string oscMessageString;
+    string realWorldAddress;
+    string screenAddress;
+    
     bool doneOnce;
     bool depthOnce;
+    bool sendReal;
+    bool sendScreen;
+    ofxControlWidget gui;
+
 };
