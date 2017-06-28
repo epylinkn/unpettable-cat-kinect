@@ -1,13 +1,16 @@
 {
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "3254A58CD4667C733C1E69C3724220787711C01D",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "3254A58CD4667C733C1E69C3724220787711C01D" : 9223372036854775807,
     "6312B7038589401E7479B6C0597D1304EB8371F6" : 9223372036854775807,
     "EF914D2D8B3604490B174A39EDD558835BBD372E" : 9223372036854775807
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "C99325A3-6AD8-4BCB-8D2B-E5B29FF818A2",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "3254A58CD4667C733C1E69C3724220787711C01D" : "unpettable-cat-kinect\/",
     "6312B7038589401E7479B6C0597D1304EB8371F6" : "..\/..\/addons\/ofxControl",
     "EF914D2D8B3604490B174A39EDD558835BBD372E" : "..\/..\/addons\/ofxKinectV2"
   },
@@ -15,6 +18,11 @@
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
   "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "unpettable-cat-kinect.xcodeproj",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:epylinkn\/unpettable-cat-kinect.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3254A58CD4667C733C1E69C3724220787711C01D"
+    },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "git:\/\/github.com\/genekogan\/ofxControl.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",

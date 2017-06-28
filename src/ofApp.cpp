@@ -195,16 +195,18 @@ void ofApp::draw(){
         msg.setAddress(screenAddress);
         
         // 2. Logic to send a sample of pixels (instead of everything)
-        int density = 50; // 1/density
+        int density = 100; // 1/density
         
         // 1. Logic to send subsection of pixels we actually care about
-        int depthPixelsSize = depthPixels.size();
-        float minPixelF = depthPixelsSize / 2 - depthPixelsSize / 3; // lower boundary
-        float maxPixelF = depthPixelsSize / 2 + depthPixelsSize / 3; // upper boundary
-        int minPixel = static_cast<int>(minPixelF);
-        int maxPixel = static_cast<int>(maxPixelF);
+//        int depthPixelsSize = depthPixels.size();
+//        float minPixelF = depthPixelsSize / 2 - depthPixelsSize / 3; // lower boundary
+//        float maxPixelF = depthPixelsSize / 2 + depthPixelsSize / 3; // upper boundary
+//        int minPixel = static_cast<int>(minPixelF);
+//        int maxPixel = static_cast<int>(maxPixelF);
         
-        for (int i = minPixel; i < maxPixel - minPixel; i += density) {
+//        for (int i = minPixel; i < maxPixel - minPixel; i += density) {
+        for (int i = 0; i < depthPixels.size(); i += density) {
+
             int depth = pixels[i];
 //            std::cout << "Depth: " + ofToString(depth) << std::endl;
             msg.addFloatArg(depth);
@@ -212,7 +214,7 @@ void ofApp::draw(){
         
         osc.sendMessage(msg);
         
-        sending = false;
+//        sending = false;
     }
 }
 
