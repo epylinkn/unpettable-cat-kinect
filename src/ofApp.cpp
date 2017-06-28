@@ -16,30 +16,19 @@ void ofApp::setup(){
     // default settings
     doneOnce = false;
     depthOnce = false;
-    sendReal = false;
-    sendScreen = true;
+    sending = false;
     oscDestination = OSC_DESTINATION_DEFAULT;
     oscAddressRoot = OSC_ADDRESS_ROOT_DEFAULT;
     oscPort = OSC_PORT_DEFAULT;
     
-    // load settings from file
-//    ofXml xml;
-//    xml.load("settings.xml");
-//    xml.setTo("unpettable-cat-kinect");
-//    oscDestination = xml.getValue("ip");
-//    oscPort = ofToInt(xml.getValue("port"));
-//    oscAddressRoot = xml.getValue("address");
-    
     // addresses + setup osc
-    realWorldAddress = oscAddressRoot + "/realworld";
     screenAddress = oscAddressRoot + "/screen";
     osc.setup(oscDestination, oscPort);
     oscMessageString = "Sending OSC to " + oscDestination + ", port " + ofToString(oscPort);
     
     // setup gui
-    gui.setName("unpettable-cat-kinect");
-//    gui.addToggle(realWorldAddress, &sendReal);
-    gui.addToggle("RECORD", &sendScreen);
+    gui.setName("Unpettable Cat");
+    gui.addToggle("SENDING", &sending);
     
     //Uncomment for verbose info from libfreenect2
     //ofSetLogLevel(OF_LOG_VERBOSE);
@@ -84,6 +73,12 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    if (sending) {
+        ofBackground(0, 255, 0);
+    } else {
+        ofBackground(30, 30, 30);
+    }
+    
     //    ofDrawBitmapString("ofxKinectV2: Work in progress addon.\nBased on the excellent work by the OpenKinect libfreenect2 team\n\n-Requires USB 3.0 port ( superspeed )\n-Requires patched libusb. If you have the libusb from ofxKinect ( v1 ) linked to your project it will prevent superspeed on Kinect V2", 10, 14);
     
     for(int d = 0; d < kinects.size(); d++){
@@ -92,8 +87,10 @@ void ofApp::draw(){
         
         float shiftY = 100 + ((10 + texDepth[d].getHeight()) * d);
         
-        texDepth[d].draw(200, shiftY);
-//        texRGB[d].draw(200, shiftY + texDepth[d].getHeight(), dwHD, dhHD);
+//        texDepth[d].draw(200, shiftY);
+        ofTexture texture = texDepth[d];
+        texture.drawSubsection(200, shiftY, texture.getWidth(), texture.getHeight()/2.0, 0, texture.getHeight()/3.0);
+        texRGB[d].draw(200, shiftY + texDepth[d].getHeight()/2, dwHD, dhHD);
     }
     
     
@@ -180,8 +177,8 @@ void ofApp::draw(){
 
     }
     
-    // send screen coordinates
-    if (sendScreen) {
+    // send osc
+    if (sending) {
         //        ofxOscMessage msg;
         //        msg.setAddress(screenAddress);
         //
@@ -197,25 +194,33 @@ void ofApp::draw(){
         ofxOscMessage msg;
         msg.setAddress(screenAddress);
         
-        int density = 100; // 1/density
-        for (int i = 0; i < depthPixels.size(); i += density) {
+        // 2. Logic to send a sample of pixels (instead of everything)
+        int density = 50; // 1/density
+        
+        // 1. Logic to send subsection of pixels we actually care about
+        int depthPixelsSize = depthPixels.size();
+        float minPixelF = depthPixelsSize / 2 - depthPixelsSize / 3; // lower boundary
+        float maxPixelF = depthPixelsSize / 2 + depthPixelsSize / 3; // upper boundary
+        int minPixel = static_cast<int>(minPixelF);
+        int maxPixel = static_cast<int>(maxPixelF);
+        
+        for (int i = minPixel; i < maxPixel - minPixel; i += density) {
             int depth = pixels[i];
 //            std::cout << "Depth: " + ofToString(depth) << std::endl;
             msg.addFloatArg(depth);
         }
         
         osc.sendMessage(msg);
-    }
-    
-    // send real world coordinates
-    if (sendReal) {
-        std::cout << "WE SHOULDN'T BE HERE!";
+        
+        sending = false;
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    
+    if (key == ' ') {
+        sending = !sending;
+    }
 }
 
 //--------------------------------------------------------------

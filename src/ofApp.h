@@ -45,8 +45,7 @@ public:
     
     bool doneOnce;
     bool depthOnce;
-    bool sendReal;
-    bool sendScreen;
+    bool sending;
     ofxControlWidget gui;
 
 };
